@@ -204,18 +204,18 @@ NavigationImpl::~NavigationImpl() {
 		  	
 
 			
-			pose.header.seq = pose_ros.header.seq;
-			pose.header.frame_id = pose_ros.header.frame_id;
-			pose.header.stamp.sec = pose_ros.header.stamp.sec;
-			pose.header.stamp.nsec = pose_ros.header.stamp.nsec;
-			pose.pose.position.x = pose_ros.pose.position.x;
-			pose.pose.position.y = pose_ros.pose.position.y;
-			pose.pose.position.z = pose_ros.pose.position.z;
+			pose.header.seq = srv.response.pose.header.seq;
+			pose.header.frame_id = srv.response.pose.header.frame_id;
+			pose.header.stamp.sec = srv.response.pose.header.stamp.sec;
+			pose.header.stamp.nsec = srv.response.pose.header.stamp.nsec;
+			pose.pose.position.x = srv.response.pose.pose.position.x;
+			pose.pose.position.y = srv.response.pose.pose.position.y;
+			pose.pose.position.z = srv.response.pose.pose.position.z;
 
-			pose.pose.orientation.x = pose_ros.pose.orientation.x;
-			pose.pose.orientation.y = pose_ros.pose.orientation.y;	
-			pose.pose.orientation.z = pose_ros.pose.orientation.z;
-			pose.pose.orientation.w = pose_ros.pose.orientation.w;
+			pose.pose.orientation.x = srv.response.pose.pose.orientation.x;
+			pose.pose.orientation.y = srv.response.pose.pose.orientation.y;	
+			pose.pose.orientation.z = srv.response.pose.pose.orientation.z;
+			pose.pose.orientation.w = srv.response.pose.pose.orientation.w;
 		    
 		    return pose;
 		  }
@@ -260,7 +260,7 @@ NavigationImpl::~NavigationImpl() {
 
 }
 std::vector<std::vector<float>> NavigationImpl::getTransform(std::string chainName, int space){
-	client_getTransform = n->serviceClient<elektron_msgs::GetTransform>("rapp_get_transform");
+	client_getTransform = n->serviceClient<elektron_msgs::GetTransform>("rapp_getTransform");
 	elektron_msgs::GetTransform srv;
 	srv.request.chainName = chainName;
 	srv.request.space = space;
