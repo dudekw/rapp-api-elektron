@@ -1,0 +1,30 @@
+/**
+ * @class Navigation
+ * @brief Class which defines the interface for Robot navigation capabilities (movement, localization)
+ * @date 10-August-2015
+ * @author Wojciech Dudek <wojciechsbox@gmail.com>
+ * @note This class uses pimpl pattern to make ABI as stable as possible when deploying new library versions
+ */
+
+
+#include <rapp-robots-api/vision/vision.hpp>
+
+#include "VisionImpl.hpp"
+
+namespace rapp {
+namespace robot {
+
+vision::vision(int argc, char ** argv ) {
+	pimpl = new VisionImpl(argc, argv);
+}
+
+vision::~vision() {
+	delete pimpl;
+}
+	bool vision::capture_image(int camera_id, int camera_resolution, const std::string & encoding){
+		bool status;
+		status = pimpl->captureImage(int cam_id);		
+		return status;
+}
+} // namespace rapp
+} // namespace robot

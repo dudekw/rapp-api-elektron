@@ -144,9 +144,9 @@ link_directories(
 #)
 
 
-#add_library(${VISION_LIB}
-#  src/vision/vision.cpp src/vision/VisionImpl.cpp
-#)
+add_library(${VISION_LIB}
+  src/vision/vision.cpp src/vision/VisionImpl.cpp
+)
 
 #add_library(${DYNAMIC_VIS_LIB}
 #  src/dynamic/vision/vision.cpp
@@ -174,11 +174,11 @@ add_library(${NAVIGATION_LIB}
 #  ${RAPP_LIBRARIES_STATIC}
 #)
 
-#target_link_libraries(${VISION_LIB}
-#  ${catkin_LIBRARIES}
-#  ${OpenCV_LIBRARIES}
-#  ${RAPP_LIBRARIES_STATIC}
-#)
+target_link_libraries(${VISION_LIB}
+  ${catkin_LIBRARIES}
+  ${OpenCV_LIBRARIES}
+  ${RAPP_LIBRARIES_STATIC}
+)
 target_link_libraries(${NAVIGATION_LIB}
   ${catkin_LIBRARIES}
   ${OpenCV_LIBRARIES}
@@ -187,10 +187,10 @@ target_link_libraries(${NAVIGATION_LIB}
 #add_dependencies(${DYNAMIC_NAV_LIB} ${catkin_EXPORTED_TARGETS})
 #add_dependencies(${DYNAMIC_VIS_LIB} ${catkin_EXPORTED_TARGETS})
 #add_dependencies(${COMMUNICATION_LIB} ${catkin_EXPORTED_TARGETS})
-#add_dependencies(${VISION_LIB} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${VISION_LIB} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${NAVIGATION_LIB} ${catkin_EXPORTED_TARGETS})
 
-#target_link_libraries(${VISION_LIB} /usr/lib/libzbar.so)
+target_link_libraries(${VISION_LIB} /usr/lib/libzbar.so)
 #target_link_libraries(${DYNAMIC_VIS_LIB} /usr/lib/libzbar.so)
 
 #############
@@ -208,7 +208,7 @@ add_dependencies(${NAVIGATION_LIB} ${catkin_EXPORTED_TARGETS})
 # )
 
 ## Mark executables and/or libraries for installation
-install(TARGETS ${NAVIGATION_LIB}#${COMMUNICATION_LIB} ${VISION_LIB} ${NAVIGATION_LIB} #${DYNAMIC_NAV_LIB} ${DYNAMIC_VIS_LIB}
+install(TARGETS ${NAVIGATION_LIB} ${VISION_LIB}#${COMMUNICATION_LIB}  ${NAVIGATION_LIB} #${DYNAMIC_NAV_LIB} ${DYNAMIC_VIS_LIB}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
