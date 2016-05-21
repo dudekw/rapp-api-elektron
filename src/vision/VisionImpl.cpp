@@ -11,16 +11,15 @@
 namespace rapp {
 namespace robot {
 
-VisionImpl::VisionImpl(int argc, char ** argv ){
-		ros::init(argc, argv,"VisionImpl_library");
-		n = new ros::NodeHandle();
+VisionImpl::VisionImpl(int argc, char ** argv) {
+    ros::init(argc, argv,"VisionImpl_library");
+    n = new ros::NodeHandle();
+}
 
-		}
 VisionImpl::~VisionImpl() {
 }
 
-rapp::object::picture::Ptr VisionImpl::captureImage(int camera_id, int camera_resolution, const std::string & encoding)
-{
+rapp::object::picture::Ptr VisionImpl::captureImage(int camera_id, int camera_resolution, const std::string & encoding) {
     if (!client_captureImage) {
         ROS_DEBUG("Invalid service client, creating new one...");
         double secs = ros::Time::now().toSec();
@@ -35,7 +34,7 @@ rapp::object::picture::Ptr VisionImpl::captureImage(int camera_id, int camera_re
     srv.request.camera_id = camera_id;
     srv.request.resolution = camera_resolution;
     sensor_msgs::Image img;
-            
+
     if (client_captureImage.call(srv)) {
         img = srv.response.frame;
         ROS_INFO("[Vision] - Image captured");
@@ -46,7 +45,13 @@ rapp::object::picture::Ptr VisionImpl::captureImage(int camera_id, int camera_re
 
     cv_bridge::CvImagePtr cv_ptr;
     try {
-        cv_ptr = cv_bridge::toCvCopy(img, sensor_msgs::image_encodings::BGR8);
+        if(camera_id >= 0 && camera_id <= 2) {
+            cv_ptr = cv_bridge::toCvCopy(img, sensor_msgs::image_encodings::BGR8);
+        } else if(camera_id >= 3 && camera_id <= 4) {
+            cv_ptr = cv_bridge::toCvCopy(img, sensor_msgs::image_encodings::TYPE_32FC1);
+        } else {
+            throw cv_bridge::Exception e("bad camera_id");
+        }
     } catch (cv_bridge::Exception e) {
         ROS_ERROR("[Vision] cv_bridge exception: %s", e.what());
         return std::make_shared<rapp::object::picture>("");
@@ -64,4 +69,3 @@ rapp::object::picture::Ptr VisionImpl::captureImage(int camera_id, int camera_re
 
 } // namespace rapp
 } // namespace robot
-
