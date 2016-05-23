@@ -49,7 +49,6 @@ rapp::object::picture::Ptr VisionImpl::captureImage(int camera_id, int camera_re
             cv_ptr = cv_bridge::toCvCopy(img, sensor_msgs::image_encodings::BGR8);
         } else if(camera_id >= 3 && camera_id <= 4) {
             cv_ptr = cv_bridge::toCvCopy(img, sensor_msgs::image_encodings::TYPE_32FC1);
-            cv::convertScaleAbs(cv_ptr->image, cv_ptr->image, 16.0, 0.0);
             cv_ptr = cv_bridge::cvtColor(cv_ptr, sensor_msgs::image_encodings::TYPE_16UC1);
         } else {
             throw new cv_bridge::Exception("bad camera_id");
