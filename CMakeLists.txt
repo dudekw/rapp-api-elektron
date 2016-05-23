@@ -20,7 +20,7 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(Rapp REQUIRED)
 find_package(RappRobots REQUIRED)
 find_package(OpenCV REQUIRED)
-find_package(Eigen3 REQUIRED)
+#find_package(Eigen3 REQUIRED)
 ##find_package(Eigen REQUIRED)
 
 include_directories(${RAPP_INCLUDE_DIRS})
@@ -76,7 +76,7 @@ include_directories(${RAPP_ROBOTS_INCLUDE_DIRS})
 
 ## Generate added messages and services with any dependencies listed here
 #generate_messages( DEPENDENCIES
-#  std_msgs 
+#  std_msgs
 #  sensor_msgs
 #)
 
@@ -139,9 +139,9 @@ link_directories(
 #  src/dynamic/navigation/localization.cpp
 #)
 
-#add_library(${COMMUNICATION_LIB}
-#  src/communication/communication.cpp src/communication/CommunicationImpl.cpp
-#)
+add_library(${COMMUNICATION_LIB}
+  src/communication/communication.cpp src/communication/CommunicationImpl.cpp
+)
 
 
 add_library(${VISION_LIB}
@@ -169,10 +169,10 @@ add_library(${NAVIGATION_LIB}
 #  ${OpenCV_LIBRARIES}
 #  ${RAPP_LIBRARIES_STATIC}
 #)
-#target_link_libraries(${COMMUNICATION_LIB}
-#  ${catkin_LIBRARIES}
-#  ${RAPP_LIBRARIES_STATIC}
-#)
+target_link_libraries(${COMMUNICATION_LIB}
+  ${catkin_LIBRARIES}
+  ${RAPP_LIBRARIES_STATIC}
+)
 
 target_link_libraries(${VISION_LIB}
   ${catkin_LIBRARIES}
@@ -186,7 +186,7 @@ target_link_libraries(${NAVIGATION_LIB}
 )
 #add_dependencies(${DYNAMIC_NAV_LIB} ${catkin_EXPORTED_TARGETS})
 #add_dependencies(${DYNAMIC_VIS_LIB} ${catkin_EXPORTED_TARGETS})
-#add_dependencies(${COMMUNICATION_LIB} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${COMMUNICATION_LIB} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${VISION_LIB} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${NAVIGATION_LIB} ${catkin_EXPORTED_TARGETS})
 
@@ -208,7 +208,7 @@ target_link_libraries(${VISION_LIB} /usr/lib/libzbar.so)
 # )
 
 ## Mark executables and/or libraries for installation
-install(TARGETS ${NAVIGATION_LIB} ${VISION_LIB}#${COMMUNICATION_LIB}  ${NAVIGATION_LIB} #${DYNAMIC_NAV_LIB} ${DYNAMIC_VIS_LIB}
+install(TARGETS ${NAVIGATION_LIB} ${VISION_LIB} ${COMMUNICATION_LIB} # ${NAVIGATION_LIB} #${DYNAMIC_NAV_LIB} ${DYNAMIC_VIS_LIB}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
