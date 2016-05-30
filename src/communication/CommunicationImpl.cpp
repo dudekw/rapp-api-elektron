@@ -47,16 +47,9 @@ bool CommunicationImpl::textToSpeech(const std::string & str, Language language)
 	elektron_msgs::Say srv;
 	bool successful = false;
 	
-	// slower and lower voice
-	std::string sentence;
-	sentence = "\\RSPD=" + std::string("80") + "\\ "; // speed
-	sentence += "\\VCT="+ std::string("43") + "\\ ";  // pitch
-	sentence += std::string(str);
-	sentence += "\\RST\\ ";
-	
-	ROS_DEBUG("Final sentence: %s", sentence.c_str());
+	ROS_DEBUG("Final sentence: %s", str.c_str());
 
-	srv.request.request = sentence;  
+	srv.request.request = str;  
 	switch(language) {
 		case Language::ENGLISH: srv.request.language = "english"; break;
 		case Language::GREEK: srv.request.language = "greek"; break;
