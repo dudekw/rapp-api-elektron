@@ -21,18 +21,18 @@ navigation::navigation(int argc, char ** argv ) {
 navigation::~navigation() {
 	delete pimpl;
 }
-	bool navigation::moveTo(float x, float y, float theta){
+	bool navigation::move_to(float x, float y, float theta){
 		bool status;
 		status = pimpl->moveTo( x, y, theta);		
 		return status;
 
 	}
-	bool navigation::moveVel(float x, float y, float theta){
+	bool navigation::move_vel(float x, float y, float theta){
 		bool status;
 		status = pimpl->moveVel(x,theta);		
 		return status;
 	}
-	bool navigation::moveVel(float x, float theta){
+	bool navigation::move_vel(float x, float theta){
 		bool status;
 		status = pimpl->moveVel(x,theta);		
 		return status;
@@ -40,12 +40,12 @@ navigation::~navigation() {
 	// bool navigation::moveHead(float yaw,float pitch){
 	// 	pimpl->moveHead(yaw,pitch);		
 	// }
-	bool navigation::moveStop(){
+	bool navigation::move_stop(){
 		bool status;
 		status = pimpl->moveStop();				
 		return status;
 	}
-	bool navigation::moveJoint(std::vector<std::string> joint, std::vector<float> angle, float speed){
+	bool navigation::move_joint(std::vector<std::string> joint, std::vector<float> angle, float speed){
 		bool status = false;
 
    		std::cout << "\nElektron robot does not support joint movement with specified speed. Joints are being moved with default speed.\n";
@@ -70,7 +70,7 @@ navigation::~navigation() {
 		}
 		return status;	
 	}
-	bool navigation::moveJoint(std::vector<std::string> joint, std::vector<float> angle){
+	bool navigation::move_joint(std::vector<std::string> joint, std::vector<float> angle){
 		bool status = false;
 
 		static const std::string arr[] = { "head_yaw","head_pitch"};
@@ -94,7 +94,7 @@ navigation::~navigation() {
 		return status;	
 	}	
 
-	bool navigation::takePredefinedPosture(std::string posture, float speed){
+	bool navigation::take_predefined_posture(std::string posture, float speed){
 
 		static const std::string arr[] = { "Crouch","Sit","SitRelax","LyingBelly","LyingBack","Stand","StandInit","StandZero"};
 		std::vector<std::string> take_posture_map(arr, arr + sizeof(arr) / sizeof(arr[0]) );
@@ -115,30 +115,30 @@ navigation::~navigation() {
 		return status;	
 	}
 
-	bool navigation::lookAtPoint(float x, float y, float z){
+	bool navigation::look_at_point(float x, float y, float z){
 		bool status;
 		status = pimpl->lookAtPoint(x, y, z);			
 		return status;	
 	}
 
-	bool navigation::moveAlongPath(std::vector<rapp::object::pose_stamped> poses){
+	bool navigation::move_along_path(std::vector<rapp::object::pose_stamped> poses){
 		bool status;
 		status = pimpl->moveAlongPath(poses);
 		return status;		
 	}
-	rapp::object::pose_stamped navigation::getRobotPose(){
+	rapp::object::pose_stamped navigation::get_global_pose(){
 		rapp::object::pose_stamped pose;
 		pose = pimpl->getRobotPose();
 		return pose;
 
 	}
-	bool navigation::setGlobalPose(rapp::object::pose rapp_pose){
+	bool navigation::set_global_pose(rapp::object::pose rapp_pose){
 
 		bool status;
 		status = pimpl->setGlobalPose(rapp_pose);
 		return status;
 	}
-	std::vector<std::vector<float>> navigation::getTransform(std::string chainName, int space){
+	std::vector<std::vector<float>> navigation::get_transform(std::string chainName, int space){
 		std::vector<std::vector<float>> MatStruct;
 		MatStruct.clear();
 		if (space == 0 ||space == 1){
