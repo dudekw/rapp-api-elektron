@@ -79,12 +79,6 @@ include_directories(${RAPP_ROBOTS_INCLUDE_DIRS})
 #   Action2.action
 # )
 
-## Generate added messages and services with any dependencies listed here
-#generate_messages( DEPENDENCIES
-#  std_msgs 
-#  sensor_msgs
-#)
-
 ADD_DEFINITIONS("-std=c++11")
 
 ################################
