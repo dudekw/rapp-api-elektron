@@ -158,7 +158,7 @@ NavigationImpl::~NavigationImpl() {
 			poses_ros.poses.clear();
 			for (int i=0; i < poses.size();i++){
 				pose_ros.header.seq = poses.at(i).header.seq;
-				pose_ros.header.frame_id = poses.at(i).header.frame_id;
+				pose_ros.header.frame_id = poses.at(i).header.frameid;
 				pose_ros.header.stamp.sec = poses.at(i).header.stamp.sec;
 				pose_ros.header.stamp.nsec = poses.at(i).header.stamp.nsec;
 				pose_ros.pose.position.x = poses.at(i).pose.position.x;
@@ -205,7 +205,7 @@ NavigationImpl::~NavigationImpl() {
 
 			
 			pose.header.seq = srv.response.pose.header.seq;
-			pose.header.frame_id = srv.response.pose.header.frame_id;
+			pose.header.frameid = srv.response.pose.header.frame_id;
 			pose.header.stamp.sec = srv.response.pose.header.stamp.sec;
 			pose.header.stamp.nsec = srv.response.pose.header.stamp.nsec;
 			pose.pose.position.x = srv.response.pose.pose.position.x;

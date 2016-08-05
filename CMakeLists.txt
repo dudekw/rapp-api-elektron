@@ -23,6 +23,11 @@ find_package(OpenCV REQUIRED)
 find_package(Eigen3 REQUIRED)
 ##find_package(Eigen REQUIRED)
 
+FIND_LIBRARY(ZBAR NAMES "zbar"
+  PATHS /usr/lib/ 
+        /usr/lib/x86_64-linux-gnu/
+)
+
 include_directories(${RAPP_INCLUDE_DIRS})
 include_directories(${RAPP_ROBOTS_INCLUDE_DIRS})
 
@@ -190,7 +195,7 @@ add_dependencies(${COMMUNICATION_LIB} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${VISION_LIB} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${NAVIGATION_LIB} ${catkin_EXPORTED_TARGETS})
 
-target_link_libraries(${VISION_LIB} /usr/lib/libzbar.so)
+target_link_libraries(${VISION_LIB} ${ZBAR})
 #target_link_libraries(${DYNAMIC_VIS_LIB} /usr/lib/libzbar.so)
 
 #############
