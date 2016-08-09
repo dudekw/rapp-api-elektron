@@ -29,6 +29,7 @@ FIND_LIBRARY(ZBAR NAMES "zbar"
 )
 
 include_directories(${RAPP_INCLUDE_DIRS})
+include_directories(${RAPP_INCLUDE_DIRS}/rapp)
 include_directories(${RAPP_ROBOTS_INCLUDE_DIRS})
 
 ## Uncomment this if the package has a setup.py. This macro ensures
