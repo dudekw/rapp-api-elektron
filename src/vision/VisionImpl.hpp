@@ -12,7 +12,7 @@
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
 #include <opencv2/opencv.hpp>
-
+#include <zbar.h> // for QRcode detection - dynamic agent
 namespace rapp {
 namespace robot {
 
@@ -35,7 +35,10 @@ public:
 	Output: image (e.g. stored RGB image)
 	Description: This function captures an image frame from the robot’s camera. The resolution of the captured image is set to cameraResolution. The returned color image is a kBGRColorSpace. The frame rate of the camera is set to 15 fps.
 	*/
-	
+
+rapp::object::qr_code_3d qrCodeDetection(rapp::object::picture::Ptr imgFrame, std::vector<std::vector<float>> robotToCameraMatrix, double camera_matrix[][3], float landmarkTheoreticalSize = 0.16f);/*
+	double camera_matrix[3][3] - camera intrinsic matrix
+	*/	
 };	
 	
 } // namespace robot

@@ -96,7 +96,7 @@ navigation::~navigation() {
 
 	bool navigation::take_predefined_posture(std::string posture, float speed){
 
-		static const std::string arr[] = { "Crouch","Sit","SitRelax","LyingBelly","LyingBack","Stand","StandInit","StandZero"};
+		static const std::string arr[] = { "Zero"};
 		std::vector<std::string> take_posture_map(arr, arr + sizeof(arr) / sizeof(arr[0]) );
 		std::sort (take_posture_map.begin(), take_posture_map.end());
 		bool status;
