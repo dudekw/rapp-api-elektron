@@ -7,7 +7,7 @@
  */
 
 #include "NavigationImpl.hpp"
-
+#include <chrono>
 namespace rapp {
 namespace robot {
 
@@ -200,14 +200,13 @@ NavigationImpl::~NavigationImpl() {
 		  if (client_getRobotPose.call(srv))
 		  {
 	  	  	ROS_INFO("Elektron returned his pose");
-		  	
-			auto sec = std::chrono::seconds(srv.response.pose.header.stamp.sec);
-			auto nsec = std::chrono::nanoseconds(srv.response.pose.header.stamp.nsec);		  	
+		auto sec = std::chrono::seconds(srv.response.pose.header.stamp.sec);
+		auto nsec = std::chrono::nanoseconds(srv.response.pose.header.stamp.nsec);		  	
 		  	std::chrono::nanoseconds ns(sec+nsec);
 			
-			pose.header.seq_ = pose_ros.header.seq;
-			pose.header.frameid_ = pose_ros.header.frame_id;
-			pose.header.stamp_= ns;
+			pose.header.seq_ = srv.response.pose.header.seq;
+			pose.header.frameid_ = srv.response.pose.header.frame_id;
+			pose.header.stamp_=ns;// = srv.response.pose.header.stamp.sec;
 			pose.pose.position.x = srv.response.pose.pose.position.x;
 			pose.pose.position.y = srv.response.pose.pose.position.y;
 			pose.pose.position.z = srv.response.pose.pose.position.z;
