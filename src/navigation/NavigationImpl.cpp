@@ -264,6 +264,10 @@ std::vector<std::vector<float>> NavigationImpl::getTransform(std::string chainNa
 	srv.request.chainName = chainName;
 	srv.request.space = space;
 	std::vector<std::vector<float>> transformMatrix;
+	int height = 4;
+	int width = 4;
+	transformMatrix.resize(height);
+	for(int i = 0; i < height; i++) transformMatrix[i].resize(width, 1.0f);
 
 	if (client_getTransform.call(srv)) //
 	{
@@ -277,8 +281,9 @@ std::vector<std::vector<float>> NavigationImpl::getTransform(std::string chainNa
 		eigen_matrix4f = eigen_matrix4d.cast <float> ();
 		for (int i=0; i<eigen_matrix4f.rows(); ++i)
 		{
-		    const float* begin = &eigen_matrix4f.row(i).data()[0];
-		    transformMatrix.push_back(std::vector<float>(begin, begin+eigen_matrix4f.cols()));
+			for (int j=0; j<eigen_matrix4f.cols(); ++j){
+		    transformMatrix.at(i).at(j) = eigen_matrix4f(i,j);
+		}
 		}
 		//*/
 		ROS_INFO("[Rapp get transform] - Transformation matrix computed");
