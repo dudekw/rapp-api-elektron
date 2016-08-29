@@ -172,7 +172,7 @@ NavigationImpl::~NavigationImpl() {
 			}
 
 
-		client_moveAlongPath = n->serviceClient<elektron_msgs::MoveAlongPath>("rapp_moveAlongPath");
+		client_moveAlongPath = n->serviceClient<elektron_msgs::MoveAlongPath>("rapp_moveAlongPath_ros");
 		  elektron_msgs::MoveAlongPath srv;
   		  srv.request.poses = poses_ros.poses;
 
