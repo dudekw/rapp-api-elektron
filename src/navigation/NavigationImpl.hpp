@@ -14,6 +14,7 @@
 // ros includes
 #include "ros/ros.h"
 #include <geometry_msgs/Pose.h>
+#include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <nav_msgs/Path.h>
 // conversions TF to eigen and eigen to TF
 #include <eigen_conversions/eigen_msg.h>
@@ -68,7 +69,7 @@ public:
 	bool moveAlongPath(std::vector<rapp::object::pose_stamped> poses);
 	rapp::object::pose_stamped getRobotPose();
 	bool setGlobalPose(rapp::object::pose rapp_pose);
-	
+ros::Publisher init_pose_pub;	
 	std::vector<std::vector<float>> getTransform(std::string chainName, int space);/*
 	Input:
 		chainName: Name of the item. Could be: any joint or chain or sensor.

@@ -14,6 +14,7 @@ namespace robot {
 NavigationImpl::NavigationImpl(int argc, char ** argv ){
 		ros::init(argc, argv,"NavigationImpl_library");
 		n = new ros::NodeHandle();
+		init_pose_pub = n->advertise<geometry_msgs::PoseWithCovarianceStamped>("/initialpose", 10);
 
 		}
 NavigationImpl::~NavigationImpl() {
@@ -172,7 +173,7 @@ NavigationImpl::~NavigationImpl() {
 			}
 
 
-		client_moveAlongPath = n->serviceClient<elektron_msgs::MoveAlongPath>("rapp_moveAlongPath");
+		client_moveAlongPath = n->serviceClient<elektron_msgs::MoveAlongPath>("rapp_moveAlongPath_ros");
 		  elektron_msgs::MoveAlongPath srv;
   		  srv.request.poses = poses_ros.poses;
 
@@ -227,28 +228,78 @@ NavigationImpl::~NavigationImpl() {
 
 	}
 	bool NavigationImpl::setGlobalPose(rapp::object::pose rapp_pose){
-		client_setGlobalPose = n->serviceClient<elektron_msgs::SetGlobalPose>("rapp_setGlobalPose");
-		elektron_msgs::SetGlobalPose srv;
+		
+geometry_msgs::PoseWithCovarianceStamped new_pose;
+//new_pose.pose.pose
+//client_setGlobalPose = n->serviceClient<elektron_msgs::SetGlobalPose>("rapp_setGlobalPose");
+	//	elektron_msgs::SetGlobalPose srv;
 		ros::Time time_now = ros::Time::now();
 		geometry_msgs::PoseStamped pose_ros;
-		pose_ros.pose.position.x = rapp_pose.position.x;
-		pose_ros.pose.position.y = rapp_pose.position.y;
-		pose_ros.pose.position.z = rapp_pose.position.z; 
-		pose_ros.pose.orientation.x = rapp_pose.orientation.x; 
-		pose_ros.pose.orientation.y = rapp_pose.orientation.y; 
-		pose_ros.pose.orientation.z = rapp_pose.orientation.z; 
-		pose_ros.pose.orientation.w = rapp_pose.orientation.w; 
-		
-		pose_ros.header.seq = 0;
-		pose_ros.header.stamp.sec = time_now.sec;
-		pose_ros.header.stamp.nsec = time_now.nsec;
-		pose_ros.header.frame_id = "map";
+		new_pose.pose.pose.position.x = rapp_pose.position.x;
+		new_pose.pose.pose.position.y = rapp_pose.position.y;
+		new_pose.pose.pose.position.z = rapp_pose.position.z; 
+		new_pose.pose.pose.orientation.x = rapp_pose.orientation.x; 
+		new_pose.pose.pose.orientation.y = rapp_pose.orientation.y; 
+		new_pose.pose.pose.orientation.z = rapp_pose.orientation.z; 
+		new_pose.pose.pose.orientation.w = rapp_pose.orientation.w; 
 
+float cov[36] = {100,  0,   0,  0,  0,  0,
+                             0,  100,  0,  0,  0,  0,
+                             0,   0,  100, 0,  0,  0, 
+                             0,   0,   0, 100, 0,  0,
+                             0,   0 ,  0 , 0 ,100 ,0 ,
+                             0 ,  0 ,  0,  0 , 0 ,100};
+ 
+new_pose.pose.covariance = {0};		
+		new_pose.header.seq = 0;
+		new_pose.header.stamp.sec = time_now.sec;
+		new_pose.header.stamp.nsec = time_now.nsec;
+		new_pose.header.frame_id = "map";
 
-  		  srv.request.pose = pose_ros;
+		init_pose_pub.publish(new_pose);
+	  	  	ROS_INFO("New pose was sended to the robot controller");
+
+ros::spinOnce();
+rapp::object::pose_stamped current_pose;
+bool confirmed=false;
+do{
+	current_pose = NavigationImpl::getRobotPose();
+	ROS_INFO("Waiting for robot controller");
+	ros::Duration(1).sleep();
+if (current_pose.pose.position.x <= rapp_pose.position.x + 0.04){
+if (current_pose.pose.position.x >= rapp_pose.position.x - 0.04){
+if (current_pose.pose.position.y <= rapp_pose.position.y + 0.04){
+if (current_pose.pose.position.y >= rapp_pose.position.y - 0.04){
+//if (current_pose.pose.position.z <= rapp_pose.position.z + 0.04){
+//if (current_pose.pose.position.z >= rapp_pose.position.z - 0.04){
+if (current_pose.pose.orientation.z <= rapp_pose.orientation.z + 0.1){
+if (current_pose.pose.orientation.z >= rapp_pose.orientation.z - 0.1){
+if (current_pose.pose.orientation.w <= rapp_pose.orientation.w + 0.1){
+if (current_pose.pose.orientation.w >= rapp_pose.orientation.w - 0.1){
+confirmed = true;
+        ROS_INFO("Localization confirmed");
+
+}}}}}}}}//}}
+
+std::cout<<"conf: "<<confirmed<<std::endl;
+
+std::cout<<"1x: "<<rapp_pose.position.x<<std::endl;
+std::cout<<"2x: "<<current_pose.pose.position.x<<std::endl;
+std::cout<<"1x: "<<rapp_pose.position.x<<std::endl;
+std::cout<<"2x: "<<current_pose.pose.position.x<<std::endl;
+std::cout<<"1x: "<<rapp_pose.position.x<<std::endl;
+std::cout<<"2x: "<<current_pose.pose.position.x<<std::endl;
+std::cout<<"10: "<<rapp_pose.orientation.z<<std::endl;
+std::cout<<"20: "<<current_pose.pose.orientation.z<<std::endl;
+std::cout<<"1w: "<<rapp_pose.orientation.w<<std::endl;
+std::cout<<"2w: "<<current_pose.pose.orientation.w<<std::endl;
+
+}while(!confirmed);
+	
+ROS_INFO("New pose confirmed");
+  	/*	  srv.request.pose = pose_ros;
 		  if (client_setGlobalPose.call(srv))
 		  {
-	  	  	ROS_INFO("Elektron is localized");
 		    return srv.response.status;
 		  }
 		  else
@@ -256,6 +307,7 @@ NavigationImpl::~NavigationImpl() {
 		    return false;
 		    ROS_ERROR("Failed to call service setGlobalPose"); 
 		  }
+*/
 
 }
 std::vector<std::vector<float>> NavigationImpl::getTransform(std::string chainName, int space){
