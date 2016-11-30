@@ -121,6 +121,12 @@ navigation::~navigation() {
 		return status;	
 	}
 
+	bool navigation::point_arm(float x, float y, float z){
+		bool status;
+		status = pimpl->lookAtPoint(x, y, z);			
+		return status;	
+	}
+
 	bool navigation::move_along_path(std::vector<rapp::object::pose_stamped> poses){
 		bool status;
 		status = pimpl->moveAlongPath(poses);
