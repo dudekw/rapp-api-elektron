@@ -1,4 +1,5 @@
 #include "CommunicationImpl.hpp"
+#include "cloud/asio/asio_http/asio_http.hpp"
 #include "cloud/service_controller/service_controller.hpp"
 #include "cloud/speech/speech_detection_sphinx4/speech_detection_sphinx4.hpp"
 #include "objects/audio/audio.hpp"

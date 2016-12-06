@@ -171,7 +171,7 @@ add_library(${NAVIGATION_LIB}
 #)
 target_link_libraries(${COMMUNICATION_LIB}
   ${catkin_LIBRARIES}
-  ${RAPP_LIBRARIES_STATIC}
+  rapp
 )
 
 target_link_libraries(${VISION_LIB}
