@@ -1,4 +1,10 @@
 #include "CommunicationImpl.hpp"
+#include "cloud/service_controller/service_controller.hpp"
+#include "cloud/speech/speech_detection_sphinx4/speech_detection_sphinx4.hpp"
+#include "objects/audio/audio.hpp"
+#include <string>
+#include <fstream>
+#include <streambuf>
 
 namespace rapp {
 namespace robot {
@@ -94,23 +100,40 @@ bool CommunicationImpl::playAudio(std::string file_path, double position, double
 	return successful;
 }
 
-std::string CommunicationImpl::wordSpotting(const std::vector<std::string>& dictionary){	
-	client_recognizeWord = n->serviceClient<elektron_msgs::RecognizeWord>("rapp_get_recognized_word");
-	elektron_msgs::RecognizeWord srv;
-	
-	srv.request.wordsList = dictionary;//copyTable(dictionary,size);
-	
-	if (client_recognizeWord.call(srv))
-	{
-		//ROS_INFO("Nao recognized word");
-		ROS_INFO_STREAM("Nao recognized word: "<< srv.response.recognizedWord);
-		return srv.response.recognizedWord;
-	}
-	else
-	{
-		ROS_ERROR("Failed to call service RecognizeWord"); 
-	}
-	return "";
+std::string CommunicationImpl::wordSpotting(const std::vector<std::string>& dictionary, int time){	
+
+	std::string audio_file = captureAudio(time);
+	std::vector<std::string> sentences = {};
+	rapp::cloud::platform_info info = {"localhost", "9001", "rapp_token"}; 
+	rapp::cloud::service_controller ctrl(info);
+    std::shared_ptr<rapp::object::audio> audio;
+    std::vector<std::string> gram;
+    audio = std::make_shared<rapp::object::microphone_wav>(audio_file);
+	assert(audio);
+
+    if (audio) {
+    // the callback
+    auto callback = [&](std::vector<std::string> words)
+    {
+        for (const auto & str : words)
+            std::cout << str << " ";
+            std::cout << std::endl;
+        return words.at(0);
+    };
+
+    // make the call
+    ctrl.make_call<rapp::cloud::speech_detection_sphinx4>(audio,
+                                                          "en",
+                                                          "rapp_token",
+                                                          gram,
+                                                          dictionary,      
+                                                          sentences,
+                                                          callback);
+            
+        }
+        else {
+            std::cerr << "missing required arguments -- please see \"--help\"\n";
+}
 }
 
 std::string CommunicationImpl::captureAudio(int time){

@@ -30,7 +30,8 @@ bool communication::text_to_speech(const std::string & str, Language language) {
 
 std::string communication::word_spotting(const std::vector<std::string> & dictionary){
 	std::string word;
-	word = pimpl->wordSpotting(dictionary);
+	int time = 5; // listen 5 sec
+	word = pimpl->wordSpotting(dictionary, time);
 	return word;
 }
 
