@@ -1,8 +1,8 @@
 #include "CommunicationImpl.hpp"
 #include "cloud/asio/asio_http/asio_http.hpp"
 #include "cloud/service_controller/service_controller.hpp"
-#include "cloud/speech/speech_detection_sphinx4/speech_detection_sphinx4.hpp"
-#include "objects/audio/audio.hpp"
+#include "cloud/speech/speech_detection_google/speech_detection_google.hpp"
+#include "rapp/objects/audio/audio.hpp"
 #include <string>
 #include <fstream>
 #include <streambuf>
@@ -114,7 +114,7 @@ std::string CommunicationImpl::wordSpotting(const std::vector<std::string>& dict
 
     if (audio) {
     // the callback
-    auto callback = [&](std::vector<std::string> words)
+    auto callback = [&](std::vector<std::string> words, std::vector<std::string> alternatives)
     {
         for (const auto & str : words)
             std::cout << str << " ";
@@ -123,12 +123,9 @@ std::string CommunicationImpl::wordSpotting(const std::vector<std::string>& dict
     };
 
     // make the call
-    ctrl.make_call<rapp::cloud::speech_detection_sphinx4>(audio,
+    ctrl.make_call<rapp::cloud::speech_detection_google>(audio,
                                                           "en",
                                                           "rapp_token",
-                                                          gram,
-                                                          dictionary,      
-                                                          sentences,
                                                           callback);
             
         }
